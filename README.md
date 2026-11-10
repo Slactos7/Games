@@ -11,7 +11,8 @@ Catálogo em português com 300 grandes jogos de 2015 a 2026, organizados por an
 - Quiz por plataforma, companhia, estilo, desafio, tempo e universo.
 - Recomendação principal, explicação e até duas alternativas.
 - Layout adaptável, navegação por teclado, campos com rótulos e preferência por movimento reduzido.
-- Sem cadastro, anúncios, chaves de API ou dependências de execução.
+- Catálogo e quiz livres para visitantes, sem anúncios ou chaves de API.
+- Em teste local: cadastro, login, favoritos privados e recomendações entre usuários com SQLite.
 
 ## Executar
 
@@ -28,6 +29,24 @@ npm test
 ```
 
 Os testes verificam a integridade do catálogo, a influência dos gostos e todas as 4.050 combinações de respostas, incluindo restrições de plataforma e modo.
+
+## Contas e listas — teste local
+
+O backend está disponível no repositório para execução e testes locais; ainda não foi configurado para hospedagem. Execute `npm start` ou `node scripts/serve.mjs` na pasta do projeto. No Windows, também é possível abrir `iniciar-local.cmd`. Mantenha o terminal aberto e acesse **http://127.0.0.1:4173/#minha-lista**. Para encerrar, pressione Ctrl+C no terminal.
+
+1. Em **Minha lista → Criar conta**, escolha um nome público (3–24 letras, números ou `_`) e uma senha de 8–128 caracteres. Não é necessário e-mail.
+2. No catálogo, nos Jogos do Ano ou no resultado principal do quiz, use **Favoritar**. Os jogos ficam em **Minha lista → Favoritos**; tocar novamente remove o favorito.
+3. Para testar recomendações, crie uma segunda conta. Use **Recomendar**, busque o nome da outra pessoa (mínimo 2 caracteres), selecione-a e envie uma mensagem opcional de até 500 caracteres.
+4. Confira **Enviadas** na conta de origem e **Recebidas** na destinatária. A destinatária pode favoritar o jogo. Remover uma recomendação a exclui das duas caixas; favoritos são independentes.
+5. Recarregue a página ou reinicie o servidor: contas, favoritos, recomendações e sessões válidas continuam salvos. **Sair da conta** invalida a sessão.
+
+O arquivo **`storage/checkpoint.sqlite`** é criado automaticamente. Ele guarda usuários, hashes e salts de senhas, sessões, favoritos e recomendações. `storage/` e arquivos SQLite são ignorados pelo Git e ficam fora dos arquivos públicos. Não envie o banco ou seus arquivos auxiliares para o repositório. Para backup, encerre o servidor antes de copiar a pasta `storage/`.
+
+O backend usa o SQLite integrado ao **Node.js 24+**, sem instalação de pacotes. Senhas são derivadas com scrypt (salt aleatório, N=131072, r=8, p=1). Sessões aleatórias duram sete dias, são armazenadas como hashes no banco e usam cookie HttpOnly/SameSite=Strict. Há validação de entrada, consultas parametrizadas, limite de tentativas de login e proteção contra solicitações de outras origens. O servidor escuta somente em `127.0.0.1`; não aceita acesso de outras máquinas. Favoritos são privados; somente remetente e destinatário acessam cada recomendação. Nenhuma conta de demonstração é criada automaticamente.
+
+`tests/backend.test.mjs` testa cadastro, login, isolamento, duplicidade, autorização, logout, expiração, persistência após reinício e bloqueio de arquivos privados. Os testes usam um banco temporário separado e não alteram suas contas locais.
+
+**Limite de hospedagem:** `npm run build` continua gerando apenas o catálogo estático. Cloudflare Pages ou GitHub Pages, sozinhos, não executam este servidor Node.js nem mantêm o banco SQLite local. Nessa versão estática, catálogo e quiz continuam funcionando e Minha lista informa a necessidade do servidor. Antes de publicar o backend, será necessário escolher hospedagem com armazenamento persistente e HTTPS (cookies Secure), ou adaptar a API e o banco para a plataforma escolhida. Recuperação de senha e verificação por e-mail ainda não fazem parte deste teste local.
 
 ## Cloudflare Pages
 

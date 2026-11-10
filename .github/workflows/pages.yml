@@ -31,7 +31,7 @@ jobs:
       - name: Preparar arquivos públicos
         run: |
           mkdir -p public/data public/assets
-          cp index.html styles.css theme.css buttons.css finishes.css awards.css app.js score.js recommender.js favicon.svg .nojekyll public/
+          cp index.html styles.css theme.css buttons.css finishes.css awards.css account.css app.js social.js score.js recommender.js favicon.svg .nojekyll public/
           cp data/*.js public/data/
           cp assets/* public/assets/
       - uses: actions/upload-pages-artifact@v3

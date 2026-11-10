@@ -1,5 +1,9 @@
 node_modules/
 dist/
+storage/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
 public/
 *.log
 .DS_Store
