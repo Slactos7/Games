@@ -73,6 +73,8 @@ Projeto independente, sem afiliação ao Metacritic, Valve ou aos estúdios cita
 
 ## Capas e botões
 
+As notas da crítica usam vermelho de 0 a 50, amarelo de 51 a 80 e verde de 81 a 100, tanto no catálogo quanto nas sugestões do questionário. Jogos ainda sem nota permanecem neutros. `score.js` centraliza essas faixas. O arquivo `finishes.css` aplica as cores e os detalhes discretos de controles no fundo do site, nas respostas e nas sugestões alternativas do quiz.
+
 Os botões usam um asset SVG transparente com gradientes verdes e curvas amarelas, sem moldura branca nem controle lateral. O texto permanece no HTML para leitura por tecnologias assistivas; os botões de ação têm uma seta em um círculo verde. O asset também é usado na seleção ativa dos anos.
 
 Se uma capa falhar, o site tenta outras URLs de imagem do mesmo jogo antes de mostrar o título no espaço reservado. Essa alternativa depende da disponibilidade das imagens externas. As alternativas não garantem que todos os servidores externos estejam disponíveis a qualquer momento.

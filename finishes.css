@@ -1,0 +1,17 @@
+/* Notas e detalhes decorativos discretos do universo dos jogos. */
+body{background-image:url('./assets/gaming-pattern.svg');background-repeat:repeat;background-size:760px 640px;background-attachment:fixed}
+.score-low{--score-bg:#f47b7b;--score-fg:#631919}
+.score-mid{--score-bg:#ffe151;--score-fg:#5a450a}
+.score-high{--score-bg:#6dd57c;--score-fg:#124a24}
+.score.score-low,.score.score-mid,.score.score-high{background:var(--score-bg);color:var(--score-fg)}
+.score.score-low:after,.score.score-mid:after,.score.score-high:after{color:var(--score-bg)}
+.alternative .mini-score{display:inline-flex;align-items:center;justify-content:center;align-self:center;min-width:43px;flex-shrink:0;padding:3px 8px;border-radius:8px;background:var(--score-bg,#edf2e2);color:var(--score-fg,#718261);font-weight:700;font-family:var(--display)}
+.score-key{gap:10px;flex-wrap:wrap}.score-key .key-band{display:inline-flex;align-items:center;gap:4px;width:auto;height:auto;background:none;border-radius:0;color:#718165}.key-band:before{content:'';display:inline-block;width:8px;height:8px;border-radius:3px;background:var(--score-bg)}
+.catalog-meta{flex-wrap:wrap}
+.quiz-option,.alternative{position:relative;isolation:isolate;overflow:hidden}
+.quiz-option:after,.alternative:after{content:'';position:absolute;z-index:-1;pointer-events:none;right:12px;top:50%;width:110px;height:82px;background:url('./assets/controller.svg') center/contain no-repeat;opacity:.075;transform:translateY(-50%) rotate(-12deg)}
+.quiz-option:has(input:checked):after{opacity:.11}
+.alternative{border-radius:10px;padding:11px 12px;margin-top:8px;background:#eff5e6a6;border:1px solid #e1e9d6}
+.alternative:after{width:83px;height:64px;right:56px;opacity:.065}
+@media(max-width:760px){body{background-size:600px 505px}.quiz-option:after{width:90px;height:68px;right:6px}}
+@media(max-width:430px){.score-key{display:flex;margin-left:0;flex-basis:100%;font-size:9px;gap:12px}.quiz-option:after{opacity:.06}.alternative{font-size:11px}}

@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="./theme.css">
   <link rel="stylesheet" href="./buttons.css">
+  <link rel="stylesheet" href="./finishes.css">
   <script type="module" src="./app.js"></script>
 </head>
 <body>
@@ -28,7 +29,7 @@
       <section class="catalog wrap" id="catalogo" aria-labelledby="catalog-title"><div class="section-heading"><div><p class="eyebrow">A LINHA DO TEMPO DO SEU PRÓXIMO FAVORITO</p><h2 id="catalog-title">Explore por ano<span>.</span></h2></div><p>Grandes lançamentos. Boas histórias. Só falta o play.</p></div>
         <div class="year-scroll"><div id="years" class="years" role="group" aria-label="Filtrar por ano"></div></div>
         <div class="filters"><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Qual jogo você procura?" aria-label="Buscar jogos por título"></label><div class="selects"><label><span class="sr-only">Gênero</span><select id="genre"><option value="all">Todos os gêneros</option></select></label><label><span class="sr-only">Ordenação</span><select id="sort"><option value="score">Maior Metascore</option><option value="title">Nome: A–Z</option></select></label><label><span class="sr-only">Status de lançamento</span><select id="release-status"><option value="all">Todos os status</option><option value="released">Já lançados</option><option value="upcoming">Em breve</option></select></label></div></div>
-        <div class="catalog-meta"><p id="result-count" role="status" aria-live="polite"></p><button class="text-button" id="clear-filters" hidden>Limpar filtros ↺</button><span class="score-key"><span></span> Nota da crítica · Metacritic</span></div>
+        <div class="catalog-meta"><p id="result-count" role="status" aria-live="polite"></p><button class="text-button" id="clear-filters" hidden>Limpar filtros ↺</button><span class="score-key" aria-label="Metascore: vermelho de 0 a 50, amarelo de 51 a 80, verde de 81 a 100"><span class="key-band score-low">0–50</span><span class="key-band score-mid">51–80</span><span class="key-band score-high">81–100</span></span></div>
         <div id="games"></div>
         <div class="empty" id="empty" hidden><span aria-hidden="true">⌕</span><h3>Nenhum jogo por aqui.</h3><p>Tente outro título, ano, gênero ou status para continuar explorando.</p><button class="button secondary" id="empty-reset">Limpar filtros</button></div>
       </section>
