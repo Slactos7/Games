@@ -5,6 +5,7 @@ Catálogo em português com 300 grandes jogos de 2015 a 2026, organizados por an
 ## Recursos
 
 - 25 jogos por ano, com opção de ver todos os 300 jogos.
+- Aba Jogos do Ano com os vencedores do The Game Awards de 2015 a 2025, destaque para a edição mais recente e situação de 2026.
 - Busca por título, filtros de gênero e status de lançamento e ordenação dentro de cada ano.
 - Metascore com plataforma avaliada e link direto à fonte.
 - Quiz por plataforma, companhia, estilo, desafio, tempo e universo.
@@ -70,6 +71,14 @@ Edite `data/games.js` ou os arquivos `data/extra-*.js`, usando o mesmo formato d
 ## Direitos
 
 Projeto independente, sem afiliação ao Metacritic, Valve ou aos estúdios citados. Nomes, marcas, personagens e capas são de seus respectivos titulares.
+
+## Jogos do Ano
+
+A aba reúne os vencedores da categoria **Game of the Year do The Game Awards** em cada ano disponível. `data/awards.js` registra os vencedores, as fontes dos prêmios e os dados dos títulos que aparecem exclusivamente nessa seleção. A lista editorial principal continua com 25 jogos por ano. Vencedores que já estão no catálogo também recebem um selo de destaque.
+
+Para 2026, a página informa que o resultado está pendente e aponta o anúncio oficial da cerimônia de 10/12/2026. Não há vencedor atribuído antecipadamente. As notas são Metascores da crítica na plataforma indicada, e não representam a votação do prêmio. O registro de Overwatch refere-se à edição original de 2016.
+
+As fontes são os arquivos do The Game Awards e os registros de cada edição, incluindo anúncios dos estúdios e cobertura histórica. Capas adicionais usam imagens do evento e reproduções das artes de seus respectivos titulares.
 
 ## Capas e botões
 

@@ -11,13 +11,14 @@
   <link rel="stylesheet" href="./theme.css">
   <link rel="stylesheet" href="./buttons.css">
   <link rel="stylesheet" href="./finishes.css">
+  <link rel="stylesheet" href="./awards.css">
   <script type="module" src="./app.js"></script>
 </head>
 <body>
   <a class="skip" href="#main">Pular para o conteúdo</a>
   <header class="header wrap">
     <a href="#catalogo" class="brand" aria-label="Checkpoint, início"><span class="brand-icon" aria-hidden="true">✳</span>checkpoint<span class="brand-dot">.</span></a>
-    <nav aria-label="Navegação principal"><a href="#catalogo" id="nav-catalog" aria-current="page">Explorar jogos</a><a href="#descobrir" id="nav-quiz">Para você <span class="tiny-star" aria-hidden="true">✧</span></a></nav>
+    <nav aria-label="Navegação principal"><a href="#catalogo" id="nav-catalog" aria-current="page">Explorar jogos</a><a href="#jogos-do-ano" id="nav-awards"><span class="nav-award-star" aria-hidden="true">★</span>Jogos do Ano</a><a href="#descobrir" id="nav-quiz">Para você <span class="tiny-star" aria-hidden="true">✧</span></a></nav>
     <span class="header-label">BONS JOGOS NÃO ENVELHECEM.</span>
   </header>
   <main id="main">
@@ -26,6 +27,7 @@
         <div class="hero-copy"><p class="eyebrow"><span></span> GRANDES HISTÓRIAS. NOVAS DESCOBERTAS.</p><h1 id="hero-title">Seu próximo jogo<br>começa <em>aqui.</em></h1><p class="hero-description">Uma viagem pelos jogos que marcaram cada ano.<br> Encontre os clássicos. Descubra seu novo favorito.</p><a class="button primary" href="#descobrir">Encontre o jogo para você <span aria-hidden="true">↗</span></a><div class="hero-stats"><span class="curated"><i aria-hidden="true">✦</i> Seu próximo favorito.</span></div></div>
         <div class="hero-art"><img class="controller" src="./assets/controller.svg" alt="Controle verde com botões amarelos, estrelas e uma órbita dourada"><div class="art-label"><span class="status-dot"></span> APERTE O PLAY NA SUA PRÓXIMA AVENTURA.</div></div>
       </section>
+      <aside class="goty-callout wrap" aria-label="Conheça os Jogos do Ano"><img src="./assets/trophy.svg" alt="" aria-hidden="true"><div><h2>Os jogos que levaram o troféu.</h2><p>Uma seleção especial dos vencedores do The Game Awards.</p></div><a href="#jogos-do-ano">Ver Jogos do Ano ↗</a></aside>
       <section class="catalog wrap" id="catalogo" aria-labelledby="catalog-title"><div class="section-heading"><div><p class="eyebrow">A LINHA DO TEMPO DO SEU PRÓXIMO FAVORITO</p><h2 id="catalog-title">Explore por ano<span>.</span></h2></div><p>Grandes lançamentos. Boas histórias. Só falta o play.</p></div>
         <div class="year-scroll"><div id="years" class="years" role="group" aria-label="Filtrar por ano"></div></div>
         <div class="filters"><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Qual jogo você procura?" aria-label="Buscar jogos por título"></label><div class="selects"><label><span class="sr-only">Gênero</span><select id="genre"><option value="all">Todos os gêneros</option></select></label><label><span class="sr-only">Ordenação</span><select id="sort"><option value="score">Maior Metascore</option><option value="title">Nome: A–Z</option></select></label><label><span class="sr-only">Status de lançamento</span><select id="release-status"><option value="all">Todos os status</option><option value="released">Já lançados</option><option value="upcoming">Em breve</option></select></label></div></div>
@@ -36,6 +38,7 @@
       <section class="quiz-banner wrap"><div><span class="eyebrow">MENOS TEMPO ESCOLHENDO. MAIS TEMPO JOGANDO.</span><h2>Seu próximo favorito<br>tem tudo a ver com você.</h2><p>Responda 6 perguntas. Encontre uma nova aventura.</p></div><a class="button primary" href="#descobrir">Encontrar meu jogo <span aria-hidden="true">↗</span></a><span class="banner-star" aria-hidden="true">✳</span></section>
     </div>
     <section id="quiz-view" class="wrap quiz-view" hidden aria-labelledby="quiz-title"><div class="quiz-intro"><p class="eyebrow">SEU GOSTO. SUA PRÓXIMA AVENTURA.</p><h1 id="quiz-title">O próximo play<br> é <em>com você.</em></h1><p>Seis escolhas para entender o que faz um jogo ser especial para você. Sem cadastro, sem complicação.</p><a href="#catalogo" class="back-link">← Voltar ao catálogo</a></div><div class="quiz-panel" id="quiz-panel"></div></section>
+    <section id="goty-view" class="wrap goty-view" hidden aria-labelledby="goty-title"><div class="goty-intro"><p class="eyebrow"><img src="./assets/trophy.svg" alt="" aria-hidden="true">HALL DA FAMA · THE GAME AWARDS</p><h1 id="goty-title">Um ano. Um troféu.<br>Uma história <em>inesquecível.</em></h1><p>Revisite os vencedores da categoria Game of the Year do The Game Awards, de 2015 a 2025. Cada conquista tem uma história — e um jogo para descobrir.</p></div><nav id="goty-years" class="goty-years" aria-label="Ir para o prêmio de um ano"></nav><div id="goty-content"></div></section>
   </main>
   <footer class="wrap footer"><a href="#catalogo" class="brand small"><span class="brand-icon" aria-hidden="true">✳</span>checkpoint.</a><div><p>Feito para quem sempre tem mais uma história para jogar.</p><p class="disclaimer">Seleção editorial de 2015–2026, não exaustiva. Notas estáticas da crítica, por plataforma, consultadas em 10/11/2026. Lançamentos verificados em 10/11/2026; previsões podem mudar. Capas: Steam, editoras e respectivos titulares. Sem afiliação ao Metacritic.</p></div><a href="https://github.com/Slactos7/Games" target="_blank" rel="noopener noreferrer" class="source-link">GitHub ↗</a></footer>
   <noscript><p class="wrap">Ative o JavaScript para explorar o catálogo e responder ao questionário.</p></noscript>

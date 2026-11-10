@@ -1,6 +1,7 @@
 import {games} from './data/games.js';
 import {questions,recommend} from './recommender.js';
 import {scoreBand} from './score.js';
+import {gameOfYear,pendingAward} from './data/awards.js';
 
 const $=id=>document.getElementById(id);
 const latestYear=Math.max(...games.map(game=>game.year));
@@ -9,13 +10,14 @@ const quiz={step:0,answers:{},finished:false};
 const normalize=value=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('pt-BR');
 const escape=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const modeLabel=mode=>({coop:'Cooperativo obrigatório',both:'Solo / cooperativo',online:'Multijogador online',solo:'Um jogador'}[mode]);
+const awardByGameId=new Map(gameOfYear.map(award=>[award.game.id,award]));
 
 function card(game){
   const upcoming=game.status==='upcoming';
   const rated=Number.isFinite(game.score);
   const scoreLabel=rated?`Metascore: ${game.score}/100 · ${game.scorePlatform}`:upcoming?'Ainda não lançado · sem Metascore':'Metascore ainda não disponível';
   const sourceLabel=rated?`Metascore · ${game.scorePlatform} ↗`:'Ver detalhes ↗';
-  return `<article class="game-card${upcoming?' upcoming-card':''}"><a class="cover-link" href="${game.source}" target="_blank" rel="noopener noreferrer" aria-label="Ver ${escape(game.title)}. ${escape(scoreLabel)}"><span class="cover-fallback" aria-hidden="true">${escape(game.title)}</span><img src="${game.cover}" data-fallbacks="${escape(JSON.stringify(game.coverFallbacks||[]))}" alt="${upcoming?'Arte promocional':'Capa'} de ${escape(game.title)}" loading="lazy" width="600" height="900"><span class="card-type">${game.genre}</span><span class="score ${scoreBand(game.score)}" title="${escape(scoreLabel)}">${rated?game.score:'—'}</span></a><div class="card-title"><h4><a href="${game.source}" target="_blank" rel="noopener noreferrer">${escape(game.title)}</a></h4><span aria-hidden="true">↗</span></div>${game.year===2026?`<a class="release-label${upcoming?' release-upcoming':''}" href="${game.releaseSource||game.source}" target="_blank" rel="noopener noreferrer">${escape(game.releaseLabel)} ↗</a>`:''}<p>${escape(game.description)}</p><div class="card-bottom"><span>${game.genre} · ${modeLabel(game.mode)}</span><a href="${game.source}" target="_blank" rel="noopener noreferrer">${sourceLabel}</a></div><div class="platforms">${game.platforms.join(' · ')}</div></article>`;
+  return `<article class="game-card${upcoming?' upcoming-card':''}"><a class="cover-link" href="${game.source}" target="_blank" rel="noopener noreferrer" aria-label="Ver ${escape(game.title)}. ${escape(scoreLabel)}"><span class="cover-fallback" aria-hidden="true">${escape(game.title)}</span><img src="${game.cover}" data-fallbacks="${escape(JSON.stringify(game.coverFallbacks||[]))}" alt="${upcoming?'Arte promocional':'Capa'} de ${escape(game.title)}" loading="lazy" width="600" height="900"><span class="card-type">${game.genre}</span><span class="score ${scoreBand(game.score)}" title="${escape(scoreLabel)}">${rated?game.score:'—'}</span></a><div class="card-title"><h4><a href="${game.source}" target="_blank" rel="noopener noreferrer">${escape(game.title)}</a></h4><span aria-hidden="true">↗</span></div>${awardByGameId.has(game.id)?`<span class="goty-card-badge">★ Jogo do Ano ${awardByGameId.get(game.id).year}</span>`:''}${game.year===2026?`<a class="release-label${upcoming?' release-upcoming':''}" href="${game.releaseSource||game.source}" target="_blank" rel="noopener noreferrer">${escape(game.releaseLabel)} ↗</a>`:''}<p>${escape(game.description)}</p><div class="card-bottom"><span>${game.genre} · ${modeLabel(game.mode)}</span><a href="${game.source}" target="_blank" rel="noopener noreferrer">${sourceLabel}</a></div><div class="platforms">${game.platforms.join(' · ')}</div></article>`;
 }
 
 function handleImages(root){root.querySelectorAll('img').forEach(img=>{
@@ -65,13 +67,27 @@ function renderQuiz(){
 }
 function focusQuestion(){$('quiz-panel').querySelector('h2')?.focus();}
 
+function renderAwards(){
+  if($('goty-content').childElementCount)return;
+  const latest=gameOfYear[0],game=latest.game;
+  $('goty-years').innerHTML=[pendingAward,...gameOfYear].map(award=>`<a href="#goty-${award.year}" aria-label="${award.year}${award.status==='pending'?', aguardando resultado':''}">${award.year}</a>`).join('');
+  const archive=gameOfYear.slice(1).map(award=>{
+    const awardDetails=`${award.game.note?`<p class="goty-note">${escape(award.game.note)}</p>`:''}<a class="award-source" href="${award.awardSource}" target="_blank" rel="noopener noreferrer">Consultar prêmio de ${award.year} ↗</a>`;
+    return `<section class="goty-entry" id="goty-${award.year}" aria-labelledby="goty-heading-${award.year}"><div class="goty-entry-header"><h3 id="goty-heading-${award.year}">${award.year}</h3><span><img src="./assets/trophy.svg" alt="" aria-hidden="true">Game of the Year</span></div>${card(award.game).replace('</article>',awardDetails+'</article>')}</section>`;
+  }).join('');
+  $('goty-content').innerHTML=`<section class="goty-pending" id="goty-${pendingAward.year}" aria-labelledby="goty-pending-title"><img src="./assets/trophy.svg" alt="" aria-hidden="true"><div><h2 id="goty-pending-title">2026 · Aguardando resultado</h2><p>A cerimônia está anunciada para <a href="${pendingAward.source}" target="_blank" rel="noopener noreferrer">10 de dezembro de 2026 ↗</a>. O vencedor será incluído após o anúncio.</p></div><a class="pending-link" href="#catalogo" id="goty-explore-current">Explorar jogos de 2026 →</a></section><section class="goty-feature" id="goty-${latest.year}" aria-labelledby="goty-feature-title"><div class="goty-feature-art"><span class="cover-fallback" aria-hidden="true">${escape(game.title)}</span><img src="${game.cover}" data-fallbacks="${escape(JSON.stringify(game.coverFallbacks||[]))}" alt="Capa de ${escape(game.title)}"></div><div class="goty-feature-copy"><span class="goty-eyebrow"><img src="./assets/trophy.svg" alt="" aria-hidden="true">JOGO DO ANO ${latest.year}</span><h2 id="goty-feature-title">${escape(game.title)}</h2><p>${escape(game.description)}</p><div class="goty-feature-bottom"><a class="feature-score ${scoreBand(game.score)}" href="${game.source}" target="_blank" rel="noopener noreferrer"><b>${game.score}</b><span>Metascore<br>${game.scorePlatform} ↗</span></a><span>${game.genre} · ${game.platforms.join(' / ')}</span></div><a class="goty-source" href="${latest.awardSource}" target="_blank" rel="noopener noreferrer">Vencedor do The Game Awards ${latest.year} ↗</a></div></section><div class="goty-archive-heading"><h2>Conquistas que marcaram época<span>.</span></h2><p>De volta aos grandes vencedores.</p></div><div class="goty-grid">${archive}</div><p class="goty-footnote">Esta seleção reúne os vencedores da categoria Game of the Year do The Game Awards nos anos disponíveis no catálogo. As notas são Metascores da crítica nas plataformas indicadas. As fontes de cada prêmio estão nos cartões. Situação de 2026 conferida em 10/11/2026.</p>`;
+  $('goty-explore-current').onclick=()=>{resetFilters();state.year=2026;renderCatalog();};
+  handleImages($('goty-content'));
+}
+
 function route(){
   const isQuiz=location.hash==='#descobrir';
-  $('catalog-view').hidden=isQuiz;$('quiz-view').hidden=!isQuiz;
-  $('nav-quiz').toggleAttribute('aria-current',isQuiz);$('nav-catalog').toggleAttribute('aria-current',!isQuiz);
-  (isQuiz?$('nav-quiz'):$('nav-catalog')).setAttribute('aria-current','page');
-  document.title=isQuiz?'Encontre seu jogo — Checkpoint':'Checkpoint — grandes jogos, novas descobertas';
+  const isAwards=location.hash==='#jogos-do-ano'||/^#goty-\d{4}$/.test(location.hash);
+  $('catalog-view').hidden=isQuiz||isAwards;$('quiz-view').hidden=!isQuiz;$('goty-view').hidden=!isAwards;
+  for(const [id,active] of [['nav-catalog',!isQuiz&&!isAwards],['nav-quiz',isQuiz],['nav-awards',isAwards]]){if(active)$(id).setAttribute('aria-current','page');else $(id).removeAttribute('aria-current');}
+  document.title=isQuiz?'Encontre seu jogo — Checkpoint':isAwards?'Jogos do Ano — Checkpoint':'Checkpoint — grandes jogos, novas descobertas';
   if(isQuiz){renderQuiz();window.scrollTo({top:0,behavior:'instant'});}
+  if(isAwards){renderAwards();if(location.hash.startsWith('#goty-'))document.getElementById(location.hash.slice(1))?.scrollIntoView({block:'start',behavior:'instant'});else window.scrollTo({top:0,behavior:'instant'});}
 }
 
 $('years').innerHTML=[['all','Todos'],...[...new Set(games.map(game=>game.year))].sort((a,b)=>b-a).map(year=>[year,year])].map(([value,label])=>`<button class="year-btn" data-year="${value}" aria-pressed="false">${label}</button>`).join('');
