@@ -30,9 +30,9 @@ Os testes verificam a integridade do catálogo, a influência dos gostos e todas
 
 ## Publicação no GitHub Pages
 
-O fluxo `.github/workflows/pages.yml` testa e publica os arquivos estáticos a cada envio para `main`. O endereço esperado depois da ativação é https://slactos7.github.io/Games/.
+Enviar arquivos para `main` apenas atualiza o repositório e não publica o site. O fluxo `.github/workflows/pages.yml` só pode publicar por execução manual, com a opção de confirmação de publicação marcada. Não execute esse fluxo até decidir colocar o site no ar.
 
-Na primeira publicação, se a configuração automática do Pages for bloqueada pelas permissões do repositório, abra **Settings → Pages → Build and deployment → Source → GitHub Actions** e execute novamente o fluxo. O repositório precisa permitir GitHub Actions e publicação no Pages. O arquivo de fluxo sozinho não confirma que o site já foi publicado.
+Quando quiser publicar, primeiro ative **Settings → Pages → Build and deployment → Source → GitHub Actions**. Depois execute manualmente o fluxo e confirme a publicação. O endereço esperado após uma publicação bem-sucedida é https://slactos7.github.io/Games/. O arquivo de fluxo sozinho não confirma que o site já foi publicado.
 
 ## Organização
 
