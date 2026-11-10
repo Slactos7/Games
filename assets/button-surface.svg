@@ -1,18 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" preserveAspectRatio="none" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 136" preserveAspectRatio="none" fill="none">
  <defs>
-  <linearGradient id="base" x1="160" y1="0" x2="270" y2="120" gradientUnits="userSpaceOnUse"><stop stop-color="#38c72a"/><stop offset=".34" stop-color="#0a8c32"/><stop offset=".74" stop-color="#00612d"/><stop offset="1" stop-color="#138c24"/></linearGradient>
-  <linearGradient id="gold" x1="400" y1="80" x2="570" y2="120" gradientUnits="userSpaceOnUse"><stop stop-color="#ffe900"/><stop offset="1" stop-color="#f6b900"/></linearGradient>
-  <linearGradient id="light" x1="100" y1="0" x2="170" y2="120" gradientUnits="userSpaceOnUse"><stop stop-color="#a2e83e" stop-opacity=".7"/><stop offset=".5" stop-color="#178f2e" stop-opacity="0"/><stop offset="1" stop-color="#80dd11" stop-opacity=".45"/></linearGradient>
-  <clipPath id="clip"><rect x="6" y="6" width="628" height="108" rx="54"/></clipPath>
+  <linearGradient id="base" x1="230" y1="0" x2="265" y2="136" gradientUnits="userSpaceOnUse"><stop stop-color="#58ce08"/><stop offset=".42" stop-color="#149509"/><stop offset="1" stop-color="#005b0b"/></linearGradient>
+  <linearGradient id="gold" x1="427" y1="113" x2="538" y2="136" gradientUnits="userSpaceOnUse"><stop stop-color="#ffe600"/><stop offset="1" stop-color="#ffcf00"/></linearGradient>
+  <clipPath id="pill"><rect width="640" height="136" rx="68"/></clipPath>
  </defs>
- <g clip-path="url(#clip)">
-  <rect x="6" y="6" width="628" height="108" rx="54" fill="url(#base)"/>
-  <path d="M-5 83C75 11 82 46 160 7H-5v76Z" fill="#ffdf00"/>
-  <path d="M15 111C191 151 266 53 414 77c104 17 139 2 236-37v89H15v-18Z" fill="#50bd16" opacity=".6"/>
-  <path d="M394 115c61-47 116-4 160-30 32-18 50-25 89-33v73H394v-10Z" fill="url(#gold)"/>
-  <rect x="6" y="6" width="628" height="108" rx="54" fill="url(#light)"/>
-  <g fill="#8ae85a" opacity=".25"><path d="M76 51h11v-11h10v11h11v10H97v11H87V61H76z"/><circle cx="508" cy="28" r="4"/><circle cx="498" cy="38" r="4"/><circle cx="518" cy="38" r="4"/><circle cx="508" cy="48" r="4"/></g>
+ <g clip-path="url(#pill)">
+  <rect width="640" height="136" rx="68" fill="url(#base)"/>
+  <path d="M0 71C52 36 88 15 162 0H0v71Z" fill="#ffdf00"/>
+  <path d="M0 72c122 14 161 76 272 61 110-14 163-79 251-96 52-11 88-21 117-37v136H0V72Z" fill="#006c0a" opacity=".46"/>
+  <path d="M128 34C274 83 364 73 470 37c68-24 101-53 170-37H128v34Z" fill="#55bd08" opacity=".48"/>
+  <path d="M335 136c74-5 129-44 166-32 28 8 37 32 70 32H335Z" fill="#40a906"/>
+  <path d="M411 136c47-11 73-36 99-24 21 9 27 21 59 24H411Z" fill="url(#gold)"/>
  </g>
- <rect x="6" y="6" width="628" height="108" rx="54" stroke="#fffff6" stroke-width="5"/>
- <rect x="9" y="9" width="622" height="102" rx="51" stroke="#b4f565" stroke-opacity=".35"/>
 </svg>
