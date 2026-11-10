@@ -29,6 +29,19 @@ npm test
 
 Os testes verificam a integridade do catálogo, a influência dos gostos e todas as 4.050 combinações de respostas, incluindo restrições de plataforma e modo.
 
+## Cloudflare Pages
+
+No projeto conectado ao repositório, configure:
+
+- **Framework preset:** None.
+- **Build command:** `npm run build`.
+- **Build output directory:** `dist`.
+- **Root directory:** deixe vazio (raiz do repositório).
+
+O comando prepara `dist/` com HTML, CSS, JavaScript, dados e imagens locais, sem dependências adicionais nem backend. É compatível com o Node.js 22 do ambiente do Cloudflare. Depois de salvar essas configurações, tente novamente o deploy usando o commit mais recente. O aviso de ausência de Wrangler não é um erro: este projeto não precisa desse arquivo.
+
+Para verificar a preparação localmente, execute `npm run build`. A pasta gerada é ignorada pelo Git. O script apenas prepara os arquivos; não publica por conta própria. Um projeto Cloudflare já conectado com deploy automático pode publicar ao receber novos commits.
+
 ## Publicação no GitHub Pages
 
 Enviar arquivos para `main` apenas atualiza o repositório e não publica o site. O fluxo `.github/workflows/pages.yml` só pode publicar por execução manual, com a opção de confirmação de publicação marcada. Não execute esse fluxo até decidir colocar o site no ar.
