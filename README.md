@@ -73,7 +73,7 @@ Projeto independente, sem afiliação ao Metacritic, Valve ou aos estúdios cita
 
 ## Capas e botões
 
-Os botões usam um asset SVG transparente com gradientes, curvas amarelas e borda clara. O texto permanece no HTML para leitura por tecnologias assistivas, e o controle decorativo reaproveita a ilustração do projeto. O asset é usado nos botões de ação e na seleção ativa dos anos.
+Os botões usam um asset SVG transparente com gradientes verdes e curvas amarelas, sem moldura branca nem controle lateral. O texto permanece no HTML para leitura por tecnologias assistivas; os botões de ação têm uma seta em um círculo verde. O asset também é usado na seleção ativa dos anos.
 
 Se uma capa falhar, o site tenta outras URLs de imagem do mesmo jogo antes de mostrar o título no espaço reservado. Essa alternativa depende da disponibilidade das imagens externas. As alternativas não garantem que todos os servidores externos estejam disponíveis a qualquer momento.
 
