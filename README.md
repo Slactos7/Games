@@ -1,11 +1,11 @@
 # Checkpoint ✳
 
-Catálogo em português com 33 grandes jogos de 2015 a 2025, organizados por ano de lançamento original. Inclui capas, descrições, notas da crítica do Metacritic e um questionário de seis perguntas para encontrar sua próxima aventura.
+Catálogo em português com 300 grandes jogos de 2015 a 2026, organizados por ano de lançamento original. Inclui capas, descrições, notas da crítica do Metacritic e um questionário de seis perguntas para encontrar sua próxima aventura. O visual usa fundo creme, verdes, amarelo, formas orgânicas e uma ilustração vetorial de controle, inspirado na imagem de referência fornecida pelo usuário.
 
 ## Recursos
 
-- Três destaques editoriais por ano, com opção de ver todos os anos.
-- Busca por título, filtro de gênero e ordenação dentro de cada ano.
+- 25 jogos por ano, com opção de ver todos os 300 jogos.
+- Busca por título, filtros de gênero e status de lançamento e ordenação dentro de cada ano.
 - Metascore com plataforma avaliada e link direto à fonte.
 - Quiz por plataforma, companhia, estilo, desafio, tempo e universo.
 - Recomendação principal, explicação e até duas alternativas.
@@ -38,10 +38,15 @@ Na primeira publicação, se a configuração automática do Pages for bloqueada
 
 ```text
 index.html             Estrutura das duas abas
-styles.css             Visual e layouts responsivos
+styles.css             Estrutura e layouts responsivos
+theme.css              Tema creme, verde e amarelo
+buttons.css            Botões com o acabamento verde e amarelo da referência
 app.js                 Catálogo, filtros e navegação do questionário
 recommender.js         Perguntas e classificação das recomendações
-data/games.js          Conteúdo editorial e fontes
+data/games.js          Catálogo agregado e fontes
+data/extra-*.js        Seleções adicionais por período
+assets/controller.svg  Ilustração do controle e órbita
+assets/button-surface.svg  Superfície escalável dos botões, sem texto fixo
 favicon.svg            Ícone do projeto
 scripts/serve.mjs      Servidor local sem dependências
 tests/                 Verificação do catálogo e das recomendações
@@ -50,18 +55,30 @@ tests/                 Verificação do catálogo e das recomendações
 
 ## Dados e critérios
 
-A seleção é editorial e não exaustiva: não representa um ranking oficial de melhores jogos nem inclui lançamentos de 2026. O ano corresponde à primeira versão completa do jogo, excluindo acesso antecipado; ports posteriores não alteram esse ano. Por isso uma nota de Switch pode aparecer em um jogo lançado originalmente antes em outra plataforma. Resident Evil 4 é o remake de 2023, God of War é o jogo de 2018 e DOOM é o jogo de 2016.
+A seleção é editorial e não exaustiva: não representa um ranking oficial de melhores jogos. Inclui jogos lançados e previstos para 2026. O ano corresponde à primeira versão completa do jogo, excluindo acesso antecipado; ports posteriores não alteram esse ano. Por isso uma nota de Switch pode aparecer em um jogo lançado originalmente antes em outra plataforma. Resident Evil 4 é o remake de 2023, God of War é o jogo de 2018 e DOOM é o jogo de 2016.
 
 As notas são **Metascores da crítica**, de 0 a 100, na plataforma indicada, consultadas em **10/11/2026**. Não são notas dos usuários nem médias entre plataformas. Os valores são estáticos e podem mudar no Metacritic. Cada jogo tem seu link específico de avaliações. As descrições em português são textos editoriais próprios.
 
-As capas são carregadas da CDN pública do Steam e pertencem aos respectivos titulares. Fontes tipográficas vêm do Google Fonts, com alternativas locais. É necessária conexão para esses recursos; falhas nas capas exibem o título em seu lugar. As famílias de plataformas são um filtro geral, não uma promessa de compatibilidade com todos os modelos: confira a edição e o console na loja. A imagem de uma edição Steam pode diferir da edição avaliada.
+As capas e artes promocionais vêm da CDN pública do Steam e de páginas oficiais das editoras, e pertencem aos respectivos titulares. Fontes tipográficas vêm do Google Fonts, com alternativas locais. É necessária conexão para esses recursos; falhas nas capas exibem o título em seu lugar. As famílias de plataformas são um filtro geral, não uma promessa de compatibilidade com todos os modelos: confira a edição e o console na loja. A imagem de uma edição Steam pode diferir da edição avaliada.
 
 O questionário usa regras locais, sem envio de respostas a servidores. Plataforma e modo são restrições; os demais gostos dão pontos. A nota da crítica serve apenas para desempatar. As sugestões vêm exclusivamente deste catálogo e não são uma garantia de preferência pessoal. Recarregar a página reinicia as respostas.
 
 ## Atualizar o catálogo
 
-Edite `data/games.js`, usando os campos documentados na primeira linha de `rows`. Confira a nota e a plataforma no Metacritic, mantenha o link específico e atualize a data da consulta. Para ampliar o período, atualize também os textos e contagens da página e os testes de integridade.
+Edite `data/games.js` ou os arquivos `data/extra-*.js`, usando o mesmo formato de linhas. Confira a nota e a plataforma no Metacritic, mantenha o link específico e atualize a data da consulta. Os totais da página são calculados a partir do catálogo. Para ampliar o período, atualize os textos e os testes de integridade.
 
 ## Direitos
 
 Projeto independente, sem afiliação ao Metacritic, Valve ou aos estúdios citados. Nomes, marcas, personagens e capas são de seus respectivos titulares.
+
+## Capas e botões
+
+Os botões usam um asset SVG transparente com gradientes, curvas amarelas e borda clara. O texto permanece no HTML para leitura por tecnologias assistivas, e o controle decorativo reaproveita a ilustração do projeto. O asset é usado nos botões de ação e na seleção ativa dos anos.
+
+Se uma capa falhar, o site tenta outras URLs de imagem do mesmo jogo antes de mostrar o título no espaço reservado. Essa alternativa depende da disponibilidade das imagens externas. As alternativas não garantem que todos os servidores externos estejam disponíveis a qualquer momento.
+
+O script opcional `node scripts/check-covers.mjs --write` pode verificar capas e registrar URLs corrigidas em `data/cover-overrides.js`. Ele acessa servidores públicos e deve ser executado somente com acesso autorizado. O relatório local `cover-audit.json` é ignorado pelo Git.
+
+## Calendário de 2026
+
+O ano de 2026 tem 25 títulos, separados entre já lançados e futuros lançamentos. A situação e as previsões são um retrato consultado em 10/11/2026, com links para fontes. Datas anunciadas podem mudar. Jogos futuros e títulos ainda sem Metascore mostram um traço, sem nota inventada. O questionário sugere apenas jogos já lançados. Para atualizar esse calendário, edite data/year-2026.js e confira novamente as fontes oficiais.

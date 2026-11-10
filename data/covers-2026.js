@@ -1,0 +1,26 @@
+// Artes de cabeçalho observadas nas páginas oficiais do Steam em 10/11/2026.
+export const steamCovers = {
+  "686060": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/686060/aa8075d11165fef4d4d0d09c156f0da0623b5da1/header.jpg?t=1788661023",
+  "1478500": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1478500/62eeee1507dbac905e128a62f2ce690550238db0/header.jpg?t=1785911674",
+  "1588550": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1588550/92c8e2f5ea09fcd6e9db1a10193b66da99a1720e/header_alt_assets_0.jpg?t=1793979546",
+  "1663850": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1663850/9079d7a26c8720ed0616f1bd7f912ccc22a535d4/header.jpg?t=1790232942",
+  "1875580": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1875580/368fcff2cd8f5ef01c5a89060a49f9a333076a87/header.jpg?t=1793298887",
+  "2001760": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2001760/d068139fe039e26a6a9d9f57ac5d89785b984d33/header.jpg?t=1788151394",
+  "2129530": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2129530/4cdda917a0155258a2e7909d7869f35d8f980f96/header.jpg?t=1791191985",
+  "2272360": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2272360/f50a309da98ef75cbdae400a7d492e36314ce415/header.jpg?t=1794231378",
+  "2362060": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2362060/955e8f3fce6d832c286ac8013657ed6fc51f1f85/header.jpg?t=1790931038",
+  "2483190": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2483190/c53fe3362cc3267a5d34aca3e796b90963e0e23f/header_alt_assets_6.jpg?t=1793894652",
+  "2524850": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2524850/9e82089d034705eaa84ecb130d04ed1084ce574c/header.jpg?t=1790601329",
+  "2638890": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2638890/ce31174fea86d0bafa21b26e853dcd0b7326e36f/header.jpg?t=1790383151",
+  "2852190": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2852190/de3717096a093d7bf9ab504563621bc17e37ccf4/header.jpg?t=1790900261",
+  "3010850": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3010850/1abb0c5ef76c14f463dd6e3964adb64f984237d2/header.jpg?t=1794241534",
+  "3161310": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3161310/868b1938e4540924707c8db978d494322757e28d/header.jpg?t=1792483278",
+  "3321460": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3321460/236f3814be7a97d86831800691b6096d449222a8/header.jpg?t=1794275035",
+  "3357650": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3357650/e32e168b25ed68a0cf6264c220c07e96c2abfb56/header.jpg?t=1791454600",
+  "3681010": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3681010/a21264e9fd476dcb2901c2432b598107d024c5a8/header.jpg?t=1772090941",
+  "3725190": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3725190/7466ffd579b926eb739c16a60bfbdb3758e5719e/header.jpg?t=1793961518",
+  "3751260": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3751260/9a83d0fa47c662298e15a989ff142fb5c0fda5c7/header_alt_assets_0.jpg?t=1794236865",
+  "3764200": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3764200/ce5437442768e38eb575f205ab9397d0264017b0/header.jpg?t=1779840172",
+  "3768760": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3768760/be65391533f072e79699be70ef2d47b7b2ac57ee/header_alt_assets_5.jpg?t=1793979129",
+  "4171850": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4171850/4550c09c2fa41435b7b695f31460bea297d4ce15/header.jpg?t=1793641997"
+};
