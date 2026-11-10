@@ -2,7 +2,7 @@ import {games} from './data/games.js';
 import {questions,recommend} from './recommender.js';
 import {scoreBand} from './score.js';
 import {gameOfYear,pendingAward} from './data/awards.js';
-import {socialActions,initSocial,renderPersonal} from './social.js';
+import {socialActions,initSocial,renderPersonal,renderAccount} from './social.js';
 
 const $=id=>document.getElementById(id);
 const latestYear=Math.max(...games.map(game=>game.year));
@@ -85,9 +85,11 @@ function route(){
   const isQuiz=location.hash==='#descobrir';
   const isAwards=location.hash==='#jogos-do-ano'||/^#goty-\d{4}$/.test(location.hash);
   const isPersonal=location.hash==='#minha-lista';
-  $('catalog-view').hidden=isQuiz||isAwards||isPersonal;$('quiz-view').hidden=!isQuiz;$('goty-view').hidden=!isAwards;$('personal-view').hidden=!isPersonal;
-  for(const [id,active] of [['nav-catalog',!isQuiz&&!isAwards&&!isPersonal],['nav-quiz',isQuiz],['nav-awards',isAwards],['nav-personal',isPersonal]]){if(active)$(id).setAttribute('aria-current','page');else $(id).removeAttribute('aria-current');}
-  document.title=isPersonal?'Minha lista — Checkpoint':isQuiz?'Encontre seu jogo — Checkpoint':isAwards?'Jogos do Ano — Checkpoint':'Checkpoint — grandes jogos, novas descobertas';
+  const isAccount=location.hash==='#entrar';
+  $('catalog-view').hidden=isQuiz||isAwards||isPersonal||isAccount;$('quiz-view').hidden=!isQuiz;$('goty-view').hidden=!isAwards;$('personal-view').hidden=!isPersonal;$('account-view').hidden=!isAccount;
+  for(const [id,active] of [['nav-catalog',!isQuiz&&!isAwards&&!isPersonal&&!isAccount],['nav-quiz',isQuiz],['nav-awards',isAwards],['nav-personal',isPersonal],['account-link',isAccount]]){if(active)$(id).setAttribute('aria-current','page');else $(id).removeAttribute('aria-current');}
+  document.title=isAccount?'Entrar ou criar conta — Checkpoint':isPersonal?'Minha lista — Checkpoint':isQuiz?'Encontre seu jogo — Checkpoint':isAwards?'Jogos do Ano — Checkpoint':'Checkpoint — grandes jogos, novas descobertas';
+  if(isAccount){renderAccount();window.scrollTo({top:0,behavior:'instant'});}
   if(isPersonal){renderPersonal();window.scrollTo({top:0,behavior:'instant'});}
   if(isQuiz){renderQuiz();window.scrollTo({top:0,behavior:'instant'});}
   if(isAwards){renderAwards();if(location.hash.startsWith('#goty-'))document.getElementById(location.hash.slice(1))?.scrollIntoView({block:'start',behavior:'instant'});else window.scrollTo({top:0,behavior:'instant'});}

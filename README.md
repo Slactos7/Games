@@ -34,7 +34,9 @@ Os testes verificam a integridade do catálogo, a influência dos gostos e todas
 
 Para executar localmente, use `npm start` ou `node scripts/serve.mjs` na pasta do projeto. No Windows, também é possível abrir `iniciar-local.cmd`. Mantenha o terminal aberto e acesse **http://127.0.0.1:4173/#minha-lista**. Para encerrar, pressione Ctrl+C no terminal. Para hospedar pelo repositório GitHub, siga a seção Railway abaixo.
 
-1. Em **Minha lista → Criar conta**, escolha um nome público (3–24 letras, números ou `_`) e uma senha de 8–128 caracteres. Não é necessário e-mail.
+1. Em **Entrar / criar conta → Criar conta**, escolha um nome público (3–24 letras, números ou `_`) e uma senha de 8–128 caracteres. Não é necessário e-mail.
+O botão **Entrar / criar conta** abre a tela própria em `#entrar`. **Minha lista** usa `#minha-lista` e reúne apenas a coleção e recomendações; visitantes recebem um convite para entrar. Depois de entrar ou cadastrar uma conta, o site abre automaticamente a lista pessoal.
+
 2. No catálogo, nos Jogos do Ano ou no resultado principal do quiz, use **Favoritar**. Os jogos ficam em **Minha lista → Favoritos**; tocar novamente remove o favorito.
 3. Para testar recomendações, crie uma segunda conta. Use **Recomendar**, busque o nome da outra pessoa (mínimo 2 caracteres), selecione-a e envie uma mensagem opcional de até 500 caracteres.
 4. Confira **Enviadas** na conta de origem e **Recebidas** na destinatária. A destinatária pode favoritar o jogo. Remover uma recomendação a exclui das duas caixas; favoritos são independentes.

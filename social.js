@@ -15,6 +15,7 @@ async function api(path, {method='GET', data} = {}) {
     if (response.status === 401 && user) {
       user = null; favorites.clear(); refreshButtons();
       $('account-link').textContent = 'Entrar / criar conta';
+      $('account-link').href = '#entrar';
     }
     throw new Error(result.error || 'Não foi possível concluir. Tente novamente.');
   }
@@ -40,19 +41,22 @@ function refreshButtons() {
 }
 function sessionChanged() {
   $('account-link').textContent = user ? `@${user.username}` : 'Entrar / criar conta';
+  $('account-link').href = user ? '#minha-lista' : '#entrar';
   refreshButtons();
   if (location.hash === '#minha-lista') renderPersonal();
+  if (location.hash === '#entrar') renderAccount();
 }
 const empty = (title, message) => `<div class="personal-empty"><span aria-hidden="true">✧</span><h2>${title}</h2><p>${message}</p><a class="button primary" href="#catalogo">Explorar jogos →</a></div>`;
 
-export async function renderPersonal() {
-  const panel = $('personal-content'), ticket = ++revision;
+export function renderAccount() {
+  const panel = $('account-content');
   if (!ready) {panel.innerHTML = '<p role="status">Carregando sua conta…</p>'; return;}
-  if (!available) {panel.innerHTML = empty('Vamos conectar sua conta.', 'Não foi possível carregar sua conta. Atualize a página ou tente novamente em instantes.'); return;}
+  if (user) {location.replace('#minha-lista'); return;}
+  if (!available) {panel.innerHTML = empty('Não foi possível conectar.', 'O acesso à conta está temporariamente indisponível. Atualize a página e tente novamente.'); return;}
   if (!user) {
     const register = authMode === 'register';
     panel.innerHTML = `<div class="account-layout"><div class="account-story"><span class="eyebrow">SEU ESPAÇO NO CHECKPOINT</span><h2>Boas histórias<br>merecem ser <em>guardadas.</em></h2><p>Monte sua lista de favoritos e compartilhe descobertas com outros jogadores.</p><ul><li>♥ Uma lista pessoal só sua</li><li>↗ Recomendações de pessoa para pessoa</li><li>✧ Seu catálogo sempre por perto</li></ul><small>Seu nome de usuário será público para receber recomendações. Seus favoritos são privados.</small></div><div class="account-panel"><div class="account-switch" role="group" aria-label="Acessar conta"><button data-auth-mode="login" aria-pressed="${!register}">Entrar</button><button data-auth-mode="register" aria-pressed="${register}">Criar conta</button></div><h2>${register ? 'Comece sua coleção.' : 'Bom ter você de volta.'}</h2><form id="auth-form"><label for="auth-username">Nome de usuário</label><input id="auth-username" name="username" required minlength="3" maxlength="24" pattern="[a-zA-Z0-9_]{3,24}" autocomplete="username" autocapitalize="none" spellcheck="false" aria-describedby="username-help"><small id="username-help">3–24 letras, números ou _ . Sem espaços.</small><label for="auth-password">Senha</label><input id="auth-password" name="password" type="password" required minlength="8" maxlength="128" autocomplete="${register ? 'new-password' : 'current-password'}"><small>De 8 a 128 caracteres.</small>${register ? '<label for="auth-confirm">Confirmar senha</label><input id="auth-confirm" type="password" required minlength="8" maxlength="128" autocomplete="new-password">' : ''}<p id="auth-error" class="form-error" role="alert"></p><button class="button primary" type="submit">${register ? 'Criar minha conta' : 'Entrar na minha conta'} →</button></form><p class="account-local">Sua coleção fica salva na sua conta.</p></div></div>`;
-    panel.querySelectorAll('[data-auth-mode]').forEach(button => button.onclick = () => {authMode=button.dataset.authMode; renderPersonal();});
+    panel.querySelectorAll('[data-auth-mode]').forEach(button => button.onclick = () => {authMode=button.dataset.authMode; renderAccount();});
     $('auth-form').onsubmit = async event => {
       event.preventDefault();
       const submit = event.currentTarget.querySelector('[type=submit]');
@@ -71,10 +75,20 @@ export async function renderPersonal() {
     };
     return;
   }
+}
+
+export async function renderPersonal() {
+  const panel = $('personal-content'), ticket = ++revision;
+  if (!ready) {panel.innerHTML = '<p role="status">Carregando sua conta…</p>'; return;}
+  if (!available) {panel.innerHTML = empty('Vamos conectar sua conta.', 'Não foi possível carregar sua conta. Atualize a página ou tente novamente em instantes.'); return;}
+  if (!user) {
+    panel.innerHTML = '<div class="personal-empty"><span aria-hidden="true">♡</span><h2>Uma lista com a sua cara.</h2><p>Entre na sua conta para ver seus favoritos e recomendações.</p><a class="button primary" href="#entrar">Entrar / criar conta →</a></div>';
+    return;
+  }
   panel.innerHTML = `<div class="personal-heading"><div><span class="eyebrow">SEU PRÓXIMO FAVORITO TEM UM LUGAR</span><h2>Olá, @${escape(user.username)}<span>.</span></h2><p>Guarde suas descobertas. Compartilhe as melhores.</p></div><button class="text-button" id="logout-button">Sair da conta ↗</button></div><div class="personal-tabs" role="group" aria-label="Sua coleção"><button data-personal-box="favorites" aria-pressed="${box==='favorites'}">♥ Favoritos <span>${favorites.size}</span></button><button data-personal-box="received" aria-pressed="${box==='received'}">Recebidas</button><button data-personal-box="sent" aria-pressed="${box==='sent'}">Enviadas</button></div><div id="personal-games" aria-live="polite"><p>Carregando…</p></div>`;
   $('logout-button').onclick = async event => {
     event.currentTarget.disabled = true;
-    try {await api('logout', {method:'POST'}); user=null; favorites.clear(); sessionChanged(); notify('Você saiu da conta.');}
+    try {await api('logout', {method:'POST'}); user=null; favorites.clear(); authMode='login'; location.hash='#entrar'; sessionChanged(); notify('Você saiu da conta.');}
     catch (error) {notify(error.message); if ($('logout-button')) $('logout-button').disabled=false;}
   };
   panel.querySelectorAll('[data-personal-box]').forEach(button => button.onclick = () => {box=button.dataset.personalBox; renderPersonal();});
@@ -119,7 +133,7 @@ export async function initSocial({games, card, handleImages}) {
     const favorite = event.target.closest('[data-favorite]'), recommend = event.target.closest('[data-recommend]'), remove = event.target.closest('[data-remove-recommendation]');
     if (!favorite && !recommend && !remove) return;
     if (!ready) return notify('Aguarde a conexão com sua conta.');
-    if (!user) {location.hash='#minha-lista'; notify('Entre ou crie sua conta para continuar.'); return;}
+    if (!user) {location.hash='#entrar'; notify('Entre ou crie sua conta para continuar.'); return;}
     if (recommend) return openRecommendation(catalog.get(recommend.dataset.recommend));
     const button = favorite || remove;
     button.disabled = true;
