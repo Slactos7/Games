@@ -12,7 +12,7 @@ Catálogo em português com 300 grandes jogos de 2015 a 2026, organizados por an
 - Recomendação principal, explicação e até duas alternativas.
 - Layout adaptável, navegação por teclado, campos com rótulos e preferência por movimento reduzido.
 - Catálogo e quiz livres para visitantes, sem anúncios ou chaves de API.
-- Em teste local: cadastro, login, favoritos privados e recomendações entre usuários com SQLite.
+- Cadastro, login, favoritos privados e recomendações entre usuários com SQLite; execução local ou em um serviço Railway com volume persistente.
 
 ## Executar
 
@@ -32,7 +32,7 @@ Os testes verificam a integridade do catálogo, a influência dos gostos e todas
 
 ## Contas e listas — teste local
 
-O backend está disponível no repositório para execução e testes locais; ainda não foi configurado para hospedagem. Execute `npm start` ou `node scripts/serve.mjs` na pasta do projeto. No Windows, também é possível abrir `iniciar-local.cmd`. Mantenha o terminal aberto e acesse **http://127.0.0.1:4173/#minha-lista**. Para encerrar, pressione Ctrl+C no terminal.
+Para executar localmente, use `npm start` ou `node scripts/serve.mjs` na pasta do projeto. No Windows, também é possível abrir `iniciar-local.cmd`. Mantenha o terminal aberto e acesse **http://127.0.0.1:4173/#minha-lista**. Para encerrar, pressione Ctrl+C no terminal. Para hospedar pelo repositório GitHub, siga a seção Railway abaixo.
 
 1. Em **Minha lista → Criar conta**, escolha um nome público (3–24 letras, números ou `_`) e uma senha de 8–128 caracteres. Não é necessário e-mail.
 2. No catálogo, nos Jogos do Ano ou no resultado principal do quiz, use **Favoritar**. Os jogos ficam em **Minha lista → Favoritos**; tocar novamente remove o favorito.
@@ -42,11 +42,30 @@ O backend está disponível no repositório para execução e testes locais; ain
 
 O arquivo **`storage/checkpoint.sqlite`** é criado automaticamente. Ele guarda usuários, hashes e salts de senhas, sessões, favoritos e recomendações. `storage/` e arquivos SQLite são ignorados pelo Git e ficam fora dos arquivos públicos. Não envie o banco ou seus arquivos auxiliares para o repositório. Para backup, encerre o servidor antes de copiar a pasta `storage/`.
 
-O backend usa o SQLite integrado ao **Node.js 24+**, sem instalação de pacotes. Senhas são derivadas com scrypt (salt aleatório, N=131072, r=8, p=1). Sessões aleatórias duram sete dias, são armazenadas como hashes no banco e usam cookie HttpOnly/SameSite=Strict. Há validação de entrada, consultas parametrizadas, limite de tentativas de login e proteção contra solicitações de outras origens. O servidor escuta somente em `127.0.0.1`; não aceita acesso de outras máquinas. Favoritos são privados; somente remetente e destinatário acessam cada recomendação. Nenhuma conta de demonstração é criada automaticamente.
+O backend usa o SQLite integrado ao **Node.js 24**, sem instalação de pacotes. Senhas são derivadas com scrypt (salt aleatório, N=131072, r=8, p=1). Sessões aleatórias duram sete dias, são armazenadas como hashes no banco e usam cookie HttpOnly/SameSite=Strict, com Secure automático em produção. Há validação de entrada, consultas parametrizadas, limite de tentativas por nome de usuário e proteção contra solicitações de outras origens. O servidor local escuta somente em `127.0.0.1`; em produção escuta em `0.0.0.0` na porta fornecida pela hospedagem e aceita o domínio configurado. Não confia em cabeçalhos de encaminhamento enviados pelo cliente. Favoritos são privados; somente remetente e destinatário acessam cada recomendação. Nenhuma conta de demonstração é criada automaticamente.
 
 `tests/backend.test.mjs` testa cadastro, login, isolamento, duplicidade, autorização, logout, expiração, persistência após reinício e bloqueio de arquivos privados. Os testes usam um banco temporário separado e não alteram suas contas locais.
 
-**Limite de hospedagem:** `npm run build` continua gerando apenas o catálogo estático. Cloudflare Pages ou GitHub Pages, sozinhos, não executam este servidor Node.js nem mantêm o banco SQLite local. Nessa versão estática, catálogo e quiz continuam funcionando e Minha lista informa a necessidade do servidor. Antes de publicar o backend, será necessário escolher hospedagem com armazenamento persistente e HTTPS (cookies Secure), ou adaptar a API e o banco para a plataforma escolhida. Recuperação de senha e verificação por e-mail ainda não fazem parte deste teste local.
+**Limite de hospedagem:** `npm run build` continua gerando apenas os arquivos estáticos. Cloudflare Pages ou GitHub Pages, sozinhos, não executam este servidor Node.js nem mantêm o banco SQLite. Para ter login e listas online, use o serviço completo descrito abaixo. Recuperação de senha e verificação por e-mail ainda não foram implementadas.
+
+## Railway conectado ao GitHub
+
+O Railway hospeda o site e a API juntos, usando este repositório. Não é preciso hospedar o frontend separadamente no Cloudflare ou criar um serviço PostgreSQL. O banco online começa vazio; o banco do seu computador não é enviado ao GitHub nem importado automaticamente.
+
+1. No Railway, crie um projeto com **Deploy from GitHub repo**, autorize o acesso ao repositório e selecione **Slactos7/Games**, branch **main**. Use a raiz do repositório; não use `/Games` nem `/dist` como Root Directory.
+2. Anexe um **Volume ao mesmo serviço da aplicação** e defina **Mount Path: `/data`**. Mantenha uma única instância/réplica. O SQLite será criado em `/data/checkpoint.sqlite`. O programa usa a variável automática `RAILWAY_VOLUME_MOUNT_PATH` e recusa iniciar no Railway sem volume, evitando salvar contas em disco temporário.
+3. Em **Settings → Networking → Public Networking**, use **Generate Domain**. O programa utiliza automaticamente `RAILWAY_PUBLIC_DOMAIN` como origem HTTPS do site.
+4. Confira os comandos: **Build: `npm run build`**, **Start: `npm start`**, **Healthcheck: `/healthz`**. Eles já estão registrados em `railway.toml`. Node.js 24 está definido em `package.json` e `.node-version`. A porta vem de `PORT`, fornecida pelo Railway; não fixe uma porta manualmente.
+5. Aplique as alterações e faça **Redeploy**, para que o processo receba o volume e o domínio. Se a primeira tentativa automática ocorrer antes desses passos, ela pode parar com uma mensagem pedindo o domínio ou volume; conclua a configuração e repita o deploy.
+6. Abra o domínio HTTPS gerado e crie duas contas. Teste favoritos, envio e recebimento de recomendações. Depois faça um Redeploy e confirme que suas contas e favoritos continuam disponíveis.
+
+Para domínio próprio, configure `APP_ORIGIN=https://seu-dominio.com` nas variáveis do serviço, sem caminho nem barra adicional, e faça Redeploy. `APP_ORIGIN` tem prioridade sobre o domínio automático: use esse endereço para acessar o site e entrar nas contas. `NODE_ENV=production` pode ser definido explicitamente; as variáveis automáticas do Railway já ativam o modo de produção e cookies Secure. `DB_PATH` é opcional; se informado, precisa ser um caminho absoluto de arquivo **dentro do volume**. Não defina manualmente as variáveis automáticas `RAILWAY_*`.
+
+O volume deve permanecer anexado para preservar o banco entre publicações. O repositório contém apenas o código; mantenha backups do banco separadamente. O limite de tentativas fica na memória e reinicia junto com o processo. `/healthz` verifica que o servidor e o SQLite estão respondendo, sem expor contas ou dados. `tests/production.test.mjs` cobre a configuração de hospedagem e o comportamento atrás do proxy HTTPS; a publicação real depende da configuração da sua conta Railway.
+
+Quando o serviço estiver conectado à branch `main` com publicação automática ativa, novos commits poderão disparar novos deploys. O fluxo do GitHub Pages continua manual e independente.
+
+Referências: [deploy pelo GitHub](https://docs.railway.com/deployments/github-autodeploys), [volumes persistentes](https://docs.railway.com/volumes), [domínio público](https://docs.railway.com/networking/public-networking), [healthchecks](https://docs.railway.com/deployments/healthchecks).
 
 ## Cloudflare Pages
 

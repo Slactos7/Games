@@ -39,7 +39,10 @@ async function passwordHash(password, salt) {
   return Buffer.from(await derive(password, salt, 64, {N:131072, r:8, p:1, maxmem:256 * 1024 * 1024}));
 }
 
-export async function createApp({dbPath = path.join(root, 'storage', 'checkpoint.sqlite'), secureCookies = false} = {}) {
+export async function createApp({dbPath = path.join(root, 'storage', 'checkpoint.sqlite'), secureCookies = false, publicOrigin} = {}) {
+  const site = publicOrigin ? new URL(publicOrigin) : null;
+  if (site && (site.protocol !== 'https:' || site.origin !== publicOrigin)) throw new Error('Origem pública inválida.');
+  if (site) secureCookies = true;
   const db = openDatabase(dbPath);
   // Only explicit browser assets are public; the database and server stay private.
   const publicFiles = new Set();
@@ -69,17 +72,20 @@ export async function createApp({dbPath = path.join(root, 'storage', 'checkpoint
     db.prepare('INSERT INTO sessions VALUES (?,?,?)').run(hash(token), userId, Date.now() + sessionAge * 1000);
     res.setHeader('Set-Cookie', `checkpoint_session=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${sessionAge}${secureCookies ? '; Secure' : ''}`);
   }
-  function rateLimit(req) {
-    const now = Date.now(), key = req.socket.remoteAddress;
+  function rateLimit(username) {
+    // Account keys avoid grouping all Railway visitors under a shared proxy IP.
+    // Do not trust client-supplied forwarding headers for security decisions.
+    const now = Date.now(), key = hash(username.toLowerCase());
     for (const [ip, window] of attempts) if (window.until < now) attempts.delete(ip);
+    if (attempts.size >= 5000 && !attempts.has(key)) fail(429, 'Muitas tentativas. Tente novamente em instantes.');
     const window = attempts.get(key) || {count:0, until:now + 15 * 60000};
     attempts.set(key, window);
     if (++window.count > 20) fail(429, 'Muitas tentativas. Aguarde 15 minutos antes de tentar novamente.');
   }
   async function authenticate(req, res, register) {
-    rateLimit(req);
     const data = await body(req);
     const username = typeof data.username === 'string' ? data.username.trim() : '';
+    rateLimit(username);
     const password = data.password;
     if (!/^[a-zA-Z0-9_]{3,24}$/.test(username)) fail(400, 'Use de 3 a 24 letras, números ou sublinhados no nome de usuário.');
     if (typeof password !== 'string' || password.length < 8 || password.length > 128) fail(400, 'A senha deve ter de 8 a 128 caracteres.');
@@ -111,7 +117,8 @@ export async function createApp({dbPath = path.join(root, 'storage', 'checkpoint
     if (!['GET','HEAD'].includes(method)) {
       if (req.headers['x-checkpoint-request'] !== '1') fail(403, 'Solicitação não autorizada. Atualize a página.');
       const origin = req.headers.origin;
-      if (origin && origin !== `http://${req.headers.host}` && !(secureCookies && origin === `https://${req.headers.host}`)) fail(403, 'Origem não permitida.');
+      const allowedOrigin = site ? site.origin : `http://${req.headers.host}`;
+      if (origin && origin !== allowedOrigin) fail(403, 'Origem não permitida.');
       if (req.headers['sec-fetch-site'] === 'cross-site') fail(403, 'Origem não permitida.');
     }
     if (route === '/api/register' && method === 'POST') return authenticate(req, res, true);
@@ -169,9 +176,16 @@ export async function createApp({dbPath = path.join(root, 'storage', 'checkpoint
     res.setHeader('Referrer-Policy','strict-origin-when-cross-origin');
     res.setHeader('X-Frame-Options','DENY');
     try {
-      const port = server.address()?.port;
-      if (![ `127.0.0.1:${port}`, `localhost:${port}` ].includes(req.headers.host)) fail(403, 'Use o endereço local mostrado pelo servidor.');
       const url = new URL(req.url, 'http://localhost');
+      if (url.pathname === '/healthz' && ['GET','HEAD'].includes(req.method)) {
+        db.prepare('SELECT 1').get();
+        res.writeHead(200, {'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});
+        res.end(req.method === 'HEAD' ? undefined : JSON.stringify({ok:true}));
+        return;
+      }
+      const port = server.address()?.port;
+      const allowedHosts = site ? [site.host] : [`127.0.0.1:${port}`, `localhost:${port}`];
+      if (!allowedHosts.includes(req.headers.host?.toLowerCase())) fail(403, 'Use o endereço oficial do site.');
       if (url.pathname.startsWith('/api/')) {
         res.setHeader('Cache-Control','no-store');
         const result = await api(req,res,url);
