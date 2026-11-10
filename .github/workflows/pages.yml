@@ -1,8 +1,12 @@
-name: Publicar Checkpoint no GitHub Pages
+name: Publicação manual do Checkpoint
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Confirmo que quero publicar o site no GitHub Pages'
+        required: true
+        default: false
+        type: boolean
 permissions:
   contents: read
   pages: write
@@ -12,6 +16,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   deploy:
+    if: ${{ inputs.publish == true }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -23,8 +28,6 @@ jobs:
           node-version: '24'
       - run: npm test
       - uses: actions/configure-pages@v5
-        with:
-          enablement: true
       - name: Preparar arquivos públicos
         run: |
           mkdir -p public/data public/assets
